@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://github.com/Udhay-Adithya/offshore#readme
+    about: Check out the README for usage guides and examples
+  - name: 💬 Discussions
+    url: https://github.com/Udhay-Adithya/offshore/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 🔍 Search Existing Issues
+    url: https://github.com/Udhay-Adithya/offshore/issues
+    about: Search for existing issues before creating a new one
