@@ -1,0 +1,107 @@
+# Training configuration for Offshore
+
+# Training hyperparameters
+training:
+  # Number of training epochs
+  epochs: 100
+
+  # Batch size
+  batch_size: 64
+
+  # Learning rate
+  learning_rate: 0.001
+
+  # Gradient clipping (0 to disable)
+  gradient_clip: 1.0
+
+  # Accumulate gradients over N batches (for effective larger batch size)
+  gradient_accumulation_steps: 1
+
+# Optimizer configuration
+optimizer:
+  # Optimizer type: "adamw", "adam", "sgd"
+  type: "adamw"
+
+  # Weight decay (L2 regularization)
+  weight_decay: 0.01
+
+  # Betas for Adam/AdamW
+  betas: [0.9, 0.999]
+
+  # Epsilon for numerical stability
+  eps: 1.0e-8
+
+# Learning rate scheduler
+scheduler:
+  # Scheduler type: "cosine", "step", "plateau", "none"
+  type: "cosine"
+
+  # Warmup steps/epochs
+  warmup_epochs: 5
+
+  # For step scheduler
+  step_size: 30
+  gamma: 0.1
+
+  # For plateau scheduler
+  patience: 5
+  factor: 0.5
+
+  # Minimum learning rate
+  min_lr: 1.0e-6
+
+# Loss function
+loss:
+  # Loss type: "cross_entropy", "focal"
+  type: "cross_entropy"
+
+  # Label smoothing
+  label_smoothing: 0.1
+
+  # Class weights (for imbalanced data)
+  # "auto" to compute from data, "none" for equal weights, or list of weights
+  class_weights: "auto"
+
+  # Focal loss parameters (if type is "focal")
+  focal_gamma: 2.0
+  focal_alpha: null # null or list of per-class alphas
+
+# Early stopping
+early_stopping:
+  enabled: true
+  patience: 15
+  min_delta: 0.001
+  monitor: "val_f1" # "val_loss", "val_accuracy", "val_f1"
+  mode: "max" # "min" for loss, "max" for accuracy/f1
+
+# Checkpointing
+checkpoint:
+  save_best: true
+  save_last: true
+  monitor: "val_f1"
+  mode: "max"
+
+# Logging
+logging:
+  # Log every N batches
+  log_interval: 10
+
+  # Save training curves plot
+  save_plots: true
+
+# Reproducibility
+seed: 42
+
+# Device configuration
+device:
+  # "auto", "cuda", "mps", "cpu"
+  type: "auto"
+
+  # For multi-GPU (not implemented in v1)
+  multi_gpu: false
+
+# Data loading
+dataloader:
+  num_workers: 4
+  pin_memory: true
+  drop_last: false

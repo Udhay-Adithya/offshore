@@ -1,0 +1,57 @@
+# Transformer model configuration
+# Inherits from model_base.yaml
+
+model_type: "transformer"
+
+# Transformer architecture
+transformer:
+  # Model dimension (embedding size)
+  d_model: 64
+
+  # Number of attention heads
+  nhead: 4
+
+  # Number of encoder layers
+  num_layers: 3
+
+  # Feed-forward dimension
+  dim_feedforward: 256
+
+  # Dropout rate
+  dropout: 0.1
+
+  # Positional encoding type: "sinusoidal" or "learned"
+  pos_encoding: "sinusoidal"
+
+  # Maximum sequence length for positional encoding
+  max_seq_length: 512
+
+  # Pooling strategy: "cls", "mean", "last"
+  pooling: "cls"
+
+  # Use causal attention mask (prevents future leakage)
+  causal: false
+
+  # Pre-layer normalization (more stable training)
+  pre_norm: true
+
+  # Activation function: "relu", "gelu"
+  activation: "gelu"
+
+# Channel attention (SE block) for feature dimension
+channel_attention:
+  enabled: true
+  reduction_ratio: 4
+
+# Input projection
+input_projection:
+  enabled: true
+  # Project input features to d_model dimension
+
+# Classification head (overrides base)
+head:
+  hidden_dims: [128, 64]
+  activation: "gelu"
+  dropout: 0.1
+  # Label smoothing for cross-entropy
+  label_smoothing: 0.1

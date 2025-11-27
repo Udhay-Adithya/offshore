@@ -1,0 +1,90 @@
+# Data configuration for Offshore
+# This file defines data sources, preprocessing, and labeling parameters
+
+# Stock configuration
+ticker: "AAPL"
+interval: "1d" # "1d", "1h", "15m", etc.
+
+# Data paths (relative to project root)
+paths:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+
+# Date ranges for download
+download:
+  start_date: "2015-01-01"
+  end_date: "2024-01-01"
+
+# Time-based train/val/test splits (no random shuffling!)
+splits:
+  train_end: "2022-06-30" # Train: start_date to train_end
+  val_end: "2023-06-30" # Val: train_end to val_end
+  # Test: val_end to end_date
+
+# Feature engineering
+features:
+  # Lookback window: number of past bars to use as input
+  lookback: 60
+
+  # Technical indicators to compute
+  indicators:
+    - returns
+    - log_returns
+    - volatility
+    - sma_5
+    - sma_10
+    - sma_20
+    - sma_50
+    - ema_12
+    - ema_26
+    - rsi_14
+    - macd
+    - macd_signal
+    - bollinger_upper
+    - bollinger_lower
+    - atr_14
+    - volume_sma_20
+    - price_to_sma_20
+    - high_low_range
+
+  # Feature normalization
+  normalize: true
+  normalize_method: "zscore" # "zscore" or "minmax"
+
+# Labeling configuration
+labeling:
+  # Prediction horizon: number of bars ahead to predict
+  horizon: 5
+
+  # Label type: "binary" or "multiclass"
+  label_type: "binary"
+
+  # Binary labeling threshold (return threshold for up/down)
+  # If abs(return) < threshold, it's considered "flat" (only for multiclass)
+  binary_threshold: 0.0
+
+  # Multi-class configuration (5 classes)
+  multiclass:
+    num_classes: 5
+    # Thresholds for: strong_down, mild_down, flat, mild_up, strong_up
+    # Returns are split into bins based on percentiles or fixed thresholds
+    threshold_type: "percentile" # "percentile" or "fixed"
+    # If percentile: [10, 30, 70, 90] means:
+    #   strong_down: < 10th percentile
+    #   mild_down: 10th-30th percentile
+    #   flat: 30th-70th percentile
+    #   mild_up: 70th-90th percentile
+    #   strong_up: > 90th percentile
+    percentile_thresholds: [10, 30, 70, 90]
+    # If fixed: absolute return thresholds
+    fixed_thresholds: [-0.02, -0.005, 0.005, 0.02]
+
+# Data augmentation (optional)
+augmentation:
+  enabled: false
+  noise_std: 0.001 # Gaussian noise standard deviation for returns
+
+# Missing value handling
+missing_values:
+  method: "ffill" # "ffill", "bfill", "drop", "interpolate"
+  max_consecutive_missing: 5 # Drop if more consecutive missing

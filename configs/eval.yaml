@@ -1,0 +1,88 @@
+# Evaluation and backtesting configuration
+
+# Classification evaluation
+evaluation:
+  # Metrics to compute
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - confusion_matrix
+    - roc_auc # Only for binary classification
+    - classification_report
+
+  # Averaging method for multiclass: "macro", "micro", "weighted"
+  average: "macro"
+
+# Backtesting configuration
+backtest:
+  # Enable backtesting
+  enabled: true
+
+  # Strategy type: "threshold", "argmax"
+  strategy: "threshold"
+
+  # Threshold for probability-based decisions
+  # Only trade when prob > threshold
+  prob_threshold: 0.55
+
+  # Position sizing: "fixed", "kelly" (simplified)
+  position_sizing: "fixed"
+  fixed_position_size: 1.0 # Fraction of capital per trade
+
+  # Allow short positions
+  allow_short: true
+
+  # Transaction costs (approximate)
+  transaction_cost: 0.001 # 0.1% per trade
+
+  # Slippage (approximate)
+  slippage: 0.0005 # 0.05%
+
+  # Initial capital (for PnL calculation)
+  initial_capital: 10000.0
+
+  # Risk-free rate for Sharpe ratio (annualized)
+  risk_free_rate: 0.04
+
+# Metrics to compute for backtest
+backtest_metrics:
+  - total_return
+  - annualized_return
+  - max_drawdown
+  - sharpe_ratio
+  - win_rate
+  - profit_factor
+  - num_trades
+  - avg_trade_return
+
+# Plotting
+plots:
+  # Save plots
+  save: true
+
+  # Plot types
+  types:
+    - equity_curve
+    - drawdown
+    - monthly_returns
+    - prediction_distribution
+    - confusion_matrix_heatmap
+
+  # Figure size
+  figsize: [12, 8]
+
+  # DPI for saved figures
+  dpi: 150
+
+# Output
+output:
+  # Save detailed results to CSV
+  save_csv: true
+
+  # Save predictions
+  save_predictions: true
+
+  # Results filename prefix
+  filename_prefix: "eval_results"

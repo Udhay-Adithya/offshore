@@ -1,0 +1,42 @@
+# LSTM model configuration
+# Inherits from model_base.yaml
+
+model_type: "lstm"
+
+# LSTM architecture
+lstm:
+  # Hidden dimension
+  hidden_dim: 128
+
+  # Number of LSTM layers
+  num_layers: 2
+
+  # Bidirectional LSTM
+  bidirectional: true
+
+  # Dropout between LSTM layers
+  dropout: 0.2
+
+  # Use GRU instead of LSTM
+  use_gru: false
+
+  # Pooling strategy: "last", "mean", "attention"
+  pooling: "last"
+
+# Optional attention mechanism over LSTM outputs
+attention:
+  enabled: false
+  num_heads: 4
+  dropout: 0.1
+
+# Input projection (optional)
+input_projection:
+  enabled: false
+  hidden_dim: 64
+
+# Classification head (overrides base)
+head:
+  hidden_dims: [128, 64]
+  activation: "relu"
+  dropout: 0.2
+  label_smoothing: 0.0

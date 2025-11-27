@@ -1,0 +1,31 @@
+# Base model configuration
+# Common settings shared across all model types
+
+# Model type selection (overridden by specific model configs)
+model_type: "transformer" # "transformer", "lstm", "gru", "mlp"
+
+# Input configuration
+input:
+  # Number of input features (set automatically from data config)
+  input_dim: 32
+  # Sequence length (should match data.features.lookback)
+  seq_length: 60
+
+# Output configuration
+output:
+  # Number of output classes
+  num_classes: 2 # 2 for binary, 5 for multiclass
+
+# Common regularization
+regularization:
+  dropout: 0.1
+  weight_decay: 0.01
+
+# Classification head configuration
+head:
+  hidden_dims: [128, 64]
+  activation: "gelu" # "relu", "gelu", "silu"
+  dropout: 0.1
+
+# Random seed for reproducibility
+seed: 42
