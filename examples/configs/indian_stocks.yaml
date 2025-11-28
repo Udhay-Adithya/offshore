@@ -1,0 +1,89 @@
+# =============================================================================
+# Configuration for Indian Stocks
+# =============================================================================
+# This configuration is optimized for trading Indian stocks on NSE/BSE.
+#
+# Key differences from US stocks:
+#   - Market hours: 9:15 AM - 3:30 PM IST
+#   - Settlement: T+1 (changed from T+2 in 2023)
+#   - Circuit breakers: Different volatility rules
+# =============================================================================
+
+# Data settings
+data:
+  # Example Indian stock tickers
+  # NSE: RELIANCE.NS, TCS.NS, HDFCBANK.NS, INFY.NS
+  # BSE: RELIANCE.BO, TCS.BO
+  # Indices: ^NSEI (NIFTY50), ^NSEBANK (NIFTY Bank), ^BSESN (Sensex)
+  ticker: RELIANCE.NS
+  interval: "1d"
+  start_date: "2018-01-01"
+  end_date: "2024-01-01"
+
+# Feature engineering
+features:
+  lookback: 60 # 60 trading days (~3 months)
+
+  # Technical indicators
+  indicators:
+    - sma_5
+    - sma_10
+    - sma_20
+    - sma_50
+    - ema_5
+    - ema_10
+    - ema_20
+    - rsi_14
+    - macd
+    - macd_signal
+    - macd_histogram
+    - bb_upper
+    - bb_middle
+    - bb_lower
+    - bb_width
+    - atr_14
+    - volume_ratio
+    - returns
+    - log_returns
+    - volatility_20
+
+  # Price features
+  price_features:
+    - open_close_ratio
+    - high_low_ratio
+    - close_position # Position within day's range
+
+# Labeling configuration
+labeling:
+  label_type: binary # "binary" or "multiclass"
+  horizon: 5 # 5-day prediction horizon (1 week)
+
+  # For binary classification
+  # UP: return > 0
+  # DOWN: return <= 0
+
+  # For multiclass (5 classes):
+  # strong_down: return < -2%
+  # mild_down: -2% <= return < -0.5%
+  # flat: -0.5% <= return < 0.5%
+  # mild_up: 0.5% <= return < 2%
+  # strong_up: return >= 2%
+
+  multiclass_thresholds:
+    strong_down: -0.02
+    mild_down: -0.005
+    mild_up: 0.005
+    strong_up: 0.02
+
+# Train/val/test split
+split:
+  # Time-based split (important for financial data!)
+  train_end: "2022-06-30"
+  val_end: "2023-06-30"
+  # Test: Everything after val_end
+
+# Data augmentation (optional)
+augmentation:
+  enabled: false
+  noise_std: 0.01
+  time_warp: false

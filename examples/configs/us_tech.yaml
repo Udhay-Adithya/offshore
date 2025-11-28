@@ -1,0 +1,97 @@
+# =============================================================================
+# Configuration for US Tech Stocks
+# =============================================================================
+# This configuration is optimized for US technology stocks.
+#
+# Characteristics of tech stocks:
+#   - Higher volatility than market average
+#   - Strong momentum tendencies
+#   - Sensitive to interest rates and growth expectations
+# =============================================================================
+
+# Data settings
+data:
+  # Example US tech tickers: AAPL, MSFT, GOOGL, NVDA, TSLA, META, AMZN
+  ticker: AAPL
+  interval: "1d"
+  start_date: "2015-01-01"
+  end_date: "2024-01-01"
+
+# Feature engineering
+features:
+  lookback: 60 # 60 trading days (~3 months)
+
+  # Technical indicators - comprehensive set for volatile stocks
+  indicators:
+    # Moving averages
+    - sma_5
+    - sma_10
+    - sma_20
+    - sma_50
+    - sma_200 # Long-term trend
+    - ema_5
+    - ema_10
+    - ema_20
+    - ema_50
+
+    # Momentum
+    - rsi_14
+    - rsi_7 # Faster RSI for volatile stocks
+    - macd
+    - macd_signal
+    - macd_histogram
+    - roc_10 # Rate of change
+    - momentum_10
+
+    # Volatility (important for tech stocks)
+    - bb_upper
+    - bb_middle
+    - bb_lower
+    - bb_width
+    - bb_percent # %B indicator
+    - atr_14
+    - atr_7
+    - volatility_10
+    - volatility_20
+
+    # Volume
+    - volume_ratio
+    - volume_sma_20
+    - obv # On-balance volume
+
+    # Returns
+    - returns
+    - log_returns
+    - returns_5d
+    - returns_10d
+
+  # Price features
+  price_features:
+    - open_close_ratio
+    - high_low_ratio
+    - close_position
+    - gap # Overnight gap
+
+# Labeling configuration
+labeling:
+  label_type: binary
+  horizon: 5 # 5-day prediction
+
+  # For multiclass with tech stocks, use wider thresholds
+  # due to higher volatility
+  multiclass_thresholds:
+    strong_down: -0.03 # -3%
+    mild_down: -0.01 # -1%
+    mild_up: 0.01 # +1%
+    strong_up: 0.03 # +3%
+
+# Train/val/test split
+split:
+  train_end: "2022-06-30"
+  val_end: "2023-06-30"
+
+# Data augmentation
+augmentation:
+  enabled: true
+  noise_std: 0.005 # Small noise to prevent overfitting
+  time_warp: false

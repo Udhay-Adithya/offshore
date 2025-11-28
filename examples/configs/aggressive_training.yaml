@@ -1,0 +1,89 @@
+# =============================================================================
+# Aggressive Training Configuration
+# =============================================================================
+# This configuration uses more aggressive hyperparameters for potentially
+# better results at the cost of longer training time and higher compute.
+#
+# Use this when:
+#   - You have a GPU available
+#   - You want to maximize model performance
+#   - You have time for longer training runs
+# =============================================================================
+
+# Training settings
+training:
+  # Longer training
+  epochs: 200
+  patience: 30 # More patience for early stopping
+
+  # Batch size (reduce if GPU memory is limited)
+  batch_size: 32 # Smaller batch for better generalization
+
+  # Learning rate
+  learning_rate: 0.0005 # Lower LR for stability
+  min_learning_rate: 0.00001
+
+  # Optimizer
+  optimizer: adamw
+  weight_decay: 0.05 # Stronger regularization
+
+  # Scheduler
+  scheduler: cosine_warmup
+  warmup_epochs: 10
+
+  # Gradient clipping
+  gradient_clip: 1.0
+
+  # Mixed precision (faster training on compatible GPUs)
+  use_amp: true
+
+  # Seed for reproducibility
+  seed: 42
+
+# Model-specific aggressive settings
+model_overrides:
+  transformer:
+    d_model: 128 # Larger model dimension
+    nhead: 8 # More attention heads
+    num_layers: 6 # Deeper model
+    dim_feedforward: 512
+    dropout: 0.2 # Higher dropout
+
+  lstm:
+    hidden_dim: 256 # Larger hidden state
+    num_layers: 3 # Deeper LSTM
+    bidirectional: true
+    dropout: 0.3 # Higher dropout
+
+# Data augmentation (more aggressive)
+augmentation:
+  enabled: true
+  noise_std: 0.01
+  time_warp: true
+  time_warp_sigma: 0.1
+  cutout: true
+  cutout_ratio: 0.1
+
+# Validation settings
+validation:
+  check_every_n_epochs: 1
+  metrics:
+    - accuracy
+    - f1_weighted
+    - f1_macro
+    - precision
+    - recall
+    - auc
+
+# Checkpointing
+checkpointing:
+  save_best: true
+  save_last: true
+  metric: val_f1_weighted
+  mode: max
+
+# Logging
+logging:
+  log_every_n_steps: 10
+  use_tensorboard: true
+  use_wandb: false # Set to true if using Weights & Biases
